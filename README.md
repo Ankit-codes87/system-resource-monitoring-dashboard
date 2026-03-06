@@ -9,7 +9,7 @@ This project demonstrates basic **system monitoring and observability concepts**
 
 ## Live Demo
 
-LIVE_DEMO_LINK
+[Open Live Dashboard](https://system-resource-monitoring-dashboard.streamlit.app/)
 
 ---
 
