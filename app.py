@@ -248,3 +248,72 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+// Sentinal Thoughts......
+uptime = get_system_uptime()
+    
+    # Update history (keep only last HISTORY_LEN readings)
+    st.session_state.cpu_history.append(cpu_pct)
+    st.session_state.mem_history.append(mem["percent"])
+    st.session_state.time_history.append(datetime.now().strftime("%H:%M:%S"))
+    
+    if len(st.session_state.cpu_history) > HISTORY_LEN:
+        st.session_state.cpu_history.pop(0)
+        st.session_state.mem_history.pop(0)
+        st.session_state.time_history.pop(0)
+    
+    # Layout columns
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("CPU Usage", f"{cpu_pct:.1f}%")
+        _render_progress("CPU", cpu_pct)
+    
+    with col2:
+        st.metric("RAM Usage", f"{mem['percent']:.1f}%")
+        _render_progress("RAM", mem["percent"])
+        
+        st.metric("RAM Used", f"{mem['used_gb']:.1f} GB")
+        st.metric("RAM Total", f"{mem['total_gb']:.1f} GB")
+    
+    with col3:
+        st.metric("Disk Usage", f"{disk['percent']:.1f}%")
+        _render_progress("Disk", disk["percent"])
+        
+        st.metric("Disk Used", f"{disk['used_gb']:.1f} GB")
+        st.metric("Disk Total", f"{disk['total_gb']:.1f} GB")
+    
+    st.divider()
+    
+    # System info
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("System Information")
+        st.metric("System Uptime", uptime)
+        st.metric("CPU Usage", f"{cpu_pct:.1f}%")
+        st.metric("RAM Usage", f"{mem['percent']:.1f}%")
+        st.metric("Disk Usage", f"{disk['percent']:.1f}%")
+    
+    with col2:
+        st.subheader("Usage History")
+        if len(st.session_state.time_history) > 0:
+            # Create a simple chart using Streamlit's native chart
+            import pandas as pd
+            import numpy as np
+            
+            # Create a simple line chart for CPU and Memory history
+            chart_data = pd.DataFrame({
+                'CPU %': st.session_state.cpu_history,
+                'RAM %': st.session_state.mem_history
+            }, index=st.session_state.time_history)
+            
+            st.line_chart(chart_data)
+        else:
+            st.info("Collecting data...")
+    
+    # Auto-refresh every 5 seconds
+    st.rerun()
+
+if __name__ == "__main__":
+    main()
