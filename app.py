@@ -317,3 +317,33 @@ uptime = get_system_uptime()
 
 if __name__ == "__main__":
     main()
+
+
+// Sentinal Thoughts......
+# Add this where you want the button in your main() function
+st.markdown("""
+    <style>
+    .stButton > button {
+        background-color: #FF9800;
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+    .stButton > button:hover {
+        background-color: #F57C00;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+if st.button("Orange Button"):
+    st.write("Button clicked!")
+
+st.markdown("""
+    <button style="background-color:#FF9800; color:white; border:none; 
+                   padding:10px 24px; border-radius:6px; font-weight:bold;
+                   cursor:pointer;">
+        Orange Button
+    </button>
+""", unsafe_allow_html=True)
